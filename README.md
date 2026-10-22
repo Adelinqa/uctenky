@@ -144,3 +144,70 @@ Testy (JUnit 5) jsou v `src/test/java` a pokrývají:
 | `ConsoleInputTest` | interaktivní vstup včetně opakování po chybě |
 | `MainTest` | celý běh programu od parametrů po vytištěnou účtenku |
 
+## Struktura projektu
+
+```
+uctenka-cli/
+├── pom.xml                       # Maven – verze, závislosti, spustitelný JAR
+├── obchod.properties             # údaje o obchodě
+├── README.md
+└── src/
+    ├── main/java/cz/uctenka/
+    │   ├── Main.java             # vstupní bod, parametry
+    │   ├── AppInfo.java          # název a verze (doplní Maven z pom.xml)
+    │   ├── StoreInfo.java        # údaje o obchodě
+    │   ├── StoreInfoLoader.java  # načtení údajů ze souboru
+    │   ├── ConsoleInput.java     # interaktivní zadání nákupu
+    │   ├── Item.java             # položka
+    │   ├── Receipt.java          # nákup, součty, rekapitulace DPH
+    │   ├── Payment.java          # platba, zaokrouhlení, vrácení
+    │   ├── VatRate.java          # sazby DPH
+    │   ├── Money.java            # práce s částkami
+    │   └── ReceiptFormatter.java # textová podoba účtenky
+    ├── main/resources/app.properties
+    └── test/java/cz/uctenka/     # unit testy
+```
+
+## Jak vytvořit novou verzi
+
+Verze je uvedena **jen na jednom místě – v `pom.xml`**. Do programu (`--version` a patička účtenky) se dostane automaticky přes `app.properties` při sestavení.
+
+Číslo verze `MAJOR.MINOR.PATCH` zvyšujeme takto:
+
+- **PATCH** (1.0.0 → 1.0.1) – oprava chyby, chování se jinak nemění,
+- **MINOR** (1.0.1 → 1.1.0) – nová funkce, stávající konfigurace a vstup fungují dál,
+- **MAJOR** (1.1.0 → 2.0.0) – nekompatibilní změna (např. jiný formát konfiguračního souboru).
+
+Postup vydání:
+
+```bash
+# 1. aktuální stav
+git checkout main
+git pull
+
+# 2. nastavit novou verzi v pom.xml (nebo ručně přepsat <version>)
+mvn versions:set -DnewVersion=1.1.0 -DgenerateBackupPoms=false
+
+# 3. upravit „Aktuální verze“ v tomto README
+
+# 4. sestavit a otestovat – musí projít všechny testy
+mvn clean package
+java -jar target/uctenka-cli-1.1.0.jar --version
+
+# 5. commit, tag a odeslání na GitHub
+git commit -am "Verze 1.1.0"
+git tag -a v1.1.0 -m "Verze 1.1.0"
+git push origin main --tags
+```
+
+6. Na GitHubu v sekci **Releases → Draft a new release** vybrat tag `v1.1.0` a přiložit soubor `target/uctenka-cli-1.1.0.jar`.
+
+### Sestavení bez Mavenu (ruční postup)
+
+```bash
+mkdir -p build
+javac --release 17 -encoding UTF-8 -d build $(find src/main/java -name "*.java")
+printf 'app.name=Účtenka CLI\napp.version=1.1.0\n' > build/app.properties
+printf 'Main-Class: cz.uctenka.Main\n' > manifest.txt
+jar cfm uctenka-cli-1.1.0.jar manifest.txt -C build .
+```
