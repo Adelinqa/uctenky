@@ -53,3 +53,24 @@ C 0 %        25,00       0,00      25,00
            Děkujeme za nákup!
            Účtenka CLI v1.0.0
 ```
+## Požadavky
+
+- Java 17 nebo novější (`java -version`)
+- Maven 3.8+ (jen pro sestavení, `mvn -version`)
+
+## Sestavení a spuštění
+
+```bash
+mvn clean package
+java -jar target/uctenka-cli-1.0.0.jar
+```
+
+`mvn package` zkompiluje kód, spustí všechny unit testy a vytvoří spustitelný JAR v adresáři `target/`. K běhu stačí samotná Java, vývojové prostředí není potřeba.
+
+### Parametry
+
+```
+-c, --config <soubor>  soubor s údaji o obchodě (výchozí obchod.properties v aktuálním adresáři)
+-v, --version          vypíše verzi programu
+-h, --help             vypíše nápovědu
+```
