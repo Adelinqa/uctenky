@@ -6,7 +6,7 @@ import java.util.Objects;
 public record Payment(Method method, BigDecimal total, BigDecimal toPay, BigDecimal received) {
 
     public enum Method { HOTOVE, KARTA }
-
+// validace jestli neni castka nizsi nez ta k uhrade lol
     public Payment {
         Objects.requireNonNull(method, "method");
         Objects.requireNonNull(total, "total");
