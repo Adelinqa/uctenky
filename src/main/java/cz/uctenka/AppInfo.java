@@ -29,7 +29,7 @@ public record AppInfo(String name, String version) {
     }
 
     private static String clean(String value, String fallback) {
-        // Nevyplněný placeholder (např. při spuštění bez Mavenu) nahradíme výchozí hodnotou.
+        // Nevyplněný placeholder (př. při spuštění bez Mavenu) nahradíme výchozí hodnotou
         if (value == null || value.isBlank() || value.contains("${")) {
             return fallback;
         }

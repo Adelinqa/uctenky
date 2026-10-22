@@ -20,13 +20,15 @@ public final class Money {
             throw new IllegalArgumentException(
                     "Neplatná částka „" + text.trim() + "“. Zadejte např. 24,90.");
         }
+        //nahrazuje nám případné čárky na tečky hihi
         return scale(new BigDecimal(trimmed.replace(',', '.')));
     }
-
+    //hezky nám tám dá maximálně dvě desetinná místa
     public static BigDecimal scale(BigDecimal amount) {
+
         return amount.setScale(2, RoundingMode.HALF_UP);
     }
-
+    // zaokrouhluje na cely korunky
     public static BigDecimal roundToWholeCrowns(BigDecimal amount) {
         return amount.setScale(0, RoundingMode.HALF_UP).setScale(2, RoundingMode.UNNECESSARY);
     }
