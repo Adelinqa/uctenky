@@ -108,3 +108,39 @@ Pokud se místo písmen s diakritikou zobrazují otazníky, přepněte konzoli n
 chcp 65001
 java -Dstdout.encoding=UTF-8 -jar target\uctenka-cli-1.0.0.jar
 ```
+## Konfigurace obchodu
+
+Soubor `obchod.properties` (kódování UTF-8):
+
+```properties
+obchod.nazev=Potraviny U Lípy
+obchod.ulice=Hlavní 123
+obchod.mesto=110 00 Praha 1
+obchod.ico=12345678
+obchod.dic=CZ12345678
+pokladna.cislo=1
+uctenka.paticka=Děkujeme za nákup!
+```
+
+Povinné jsou `obchod.nazev`, `obchod.ulice`, `obchod.mesto`, `obchod.ico` (8 číslic) a `obchod.dic` (např. `CZ12345678`). Pokud něco chybí nebo je chybně, program vypíše srozumitelnou chybu a skončí s kódem 3.
+
+## Testy
+
+```bash
+mvn test
+```
+
+Testy (JUnit 5) jsou v `src/test/java` a pokrývají:
+
+| Třída | Co se testuje |
+|-------|---------------|
+| `MoneyTest` | načítání a formátování částek, zaokrouhlení na koruny |
+| `VatRateTest` | sazby DPH a výpočet daně z ceny s DPH |
+| `ItemTest` | položka, výpočet ceny, validace |
+| `ReceiptTest` | součet nákupu a rekapitulace DPH |
+| `PaymentTest` | platba kartou / hotově, zaokrouhlení, vrácení |
+| `StoreInfoLoaderTest` | načítání konfigurace, chybějící a chybné údaje |
+| `ReceiptFormatterTest` | vzhled účtenky, žádný řádek není širší než účtenka |
+| `ConsoleInputTest` | interaktivní vstup včetně opakování po chybě |
+| `MainTest` | celý běh programu od parametrů po vytištěnou účtenku |
+
