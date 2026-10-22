@@ -74,3 +74,37 @@ java -jar target/uctenka-cli-1.0.0.jar
 -v, --version          vypíše verzi programu
 -h, --help             vypíše nápovědu
 ```
+### Zadávání nákupu
+
+Program se postupně ptá na:
+
+1. **Název zboží** – prázdný řádek ukončí zadávání položek.
+2. **Cenu za kus** v Kč včetně DPH – např. `24,90` nebo `24.90`.
+3. **Počet kusů** – Enter = 1.
+4. **Sazbu DPH** – `21`, `12`, `0` (nebo `A`, `B`, `C`), Enter = 21 %.
+
+Nakonec způsob platby: `K` = kartou (výchozí), `H` = hotově. U hotovosti se zadá přijatá částka (Enter = přesně).
+
+Vstup lze i přesměrovat ze souboru (každá odpověď na samostatném řádku, soubor v UTF-8):
+
+```bash
+java -jar target/uctenka-cli-1.0.0.jar < nakup.txt
+```
+
+### Návratové kódy
+
+| Kód | Význam |
+|-----|--------|
+| 0 | účtenka vytištěna |
+| 2 | chybné parametry příkazové řádky |
+| 3 | chyba konfiguračního souboru |
+| 4 | vstup skončil před dokončením nákupu |
+
+### Česká diakritika ve Windows
+
+Pokud se místo písmen s diakritikou zobrazují otazníky, přepněte konzoli na UTF-8:
+
+```bat
+chcp 65001
+java -Dstdout.encoding=UTF-8 -jar target\uctenka-cli-1.0.0.jar
+```
